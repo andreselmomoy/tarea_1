@@ -5,21 +5,21 @@ from pyspark.sql.functions import col, date_format, udf
 from pyspark.sql.types import (DateType, IntegerType, FloatType, StringType,
                                StructField, StructType, TimestampType)
 
-spark = SparkSession.builder.appName("Read Transactions").getOrCreate()
+spark = SparkSession.builder.appName("Read Estudiante").getOrCreate()
 
-csv_schema = StructType([StructField('customer_id', IntegerType()),
-                         StructField('amount', FloatType()),
-                         StructField('purchased_at', TimestampType()),
+csv_schema = StructType([StructField('Num_Carnet', IntegerType()),
+                          StructField("Name", StringType()),
+                         StructField('Career', StringType()),
                          ])
 
-dataframe = spark.read.csv("transactions.csv",
+dataframe = spark.read.csv("estudiante.csv",
                            schema=csv_schema,
                            header=True)
 
 dataframe.show()
-
+'''
 # Add a new column by formatting the original date
-
+/*
 formatted_df = dataframe.withColumn("date_string",
                                     date_format(col("purchased_at"),
                                                 'MM/dd/yyyy'))
@@ -64,3 +64,4 @@ names_df.show()
 joint_df = stats_df.join(names_df, stats_df.customer_id == names_df.id)
 joint_df.printSchema()
 joint_df.show()
+'''
