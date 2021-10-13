@@ -7,61 +7,33 @@ from pyspark.sql.types import (DateType, IntegerType, FloatType, StringType,
 
 spark = SparkSession.builder.appName("Read Estudiante").getOrCreate()
 
-csv_schema = StructType([StructField('Num_Carnet', IntegerType()),
+# Load  file  Estudiante...
+estudiante_schema = StructType([StructField('Num_Carnet', IntegerType()),
                           StructField("Name", StringType()),
                          StructField('Career', StringType()),
                          ])
 
-dataframe = spark.read.csv("estudiante.csv",
-                           schema=csv_schema,
+estudiante_df = spark.read.csv("estudiante.csv",
+                           schema=estudiante_schema,
                            header=True)
 
-dataframe.show()
-'''
-# Add a new column by formatting the original date
-/*
-formatted_df = dataframe.withColumn("date_string",
-                                    date_format(col("purchased_at"),
-                                                'MM/dd/yyyy'))
-formatted_df.show()
+estudiante_df.show()
 
-# Create a user defined function
-string_to_date = \
-    udf(lambda text_date: datetime.strptime(text_date, '%m/%d/%Y'),
-        DateType())
+# Load  file  Curso...
+curso_schema = StructType([StructField("Codigo", IntegerType()),
+                          StructField("Credit", IntegerType()),
+                          StructField("Career", StringType())])
 
-typed_df = formatted_df.withColumn(
-    "date", string_to_date(formatted_df.date_string))
-typed_df.show()
-typed_df.printSchema()
-
-# Group By and Select the data already aggregated
-sum_df = typed_df.groupBy("customer_id", "date").sum()
-sum_df.show()
-
-stats_df = \
-    sum_df.select(
-        col('customer_id'),
-        col('date'),
-        col('sum(amount)').alias('amount'))
-
-stats_df.printSchema()
-stats_df.show()
-
-# Load separate file where we store user names...
-name_schema = StructType([StructField("id", IntegerType()),
-                          StructField("name", StringType()),
-                          StructField("currency", StringType())])
-
-names_df = spark.read.csv('names.csv',
-                          schema=name_schema,
+curso_df = spark.read.csv('curso.csv',
+                          schema=curso_schema,
                           header=True)
 
-names_df.printSchema()
-names_df.show()
 
-# ...and join to the aggregates
-joint_df = stats_df.join(names_df, stats_df.customer_id == names_df.id)
-joint_df.printSchema()
-joint_df.show()
-'''
+curso_df.show()
+
+
+
+
+
+
+
